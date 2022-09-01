@@ -8,16 +8,12 @@ namespace A.I.neural.network
     {
         static void Main(string[] Args)
         {
-            //int[] diameter = new int[9];
-            int[] diameter = { 23,18,8,200,8,30,5,10,0};
-            //int[] length = new int[9];
-            int[] length = {4,3,2,30,150,350,100,200,0};
-            //int[] correctAnswer = new int[9];
-            int[] correctAnswer = { 1,1,1,1,2,2,2,2, 0 };
-            bool[] correct = new bool[9];
-            double[] result = new double[9];
-            //int[] correctThings = new int[9];
-            int[] correctThings = { 1, 1, 1, 1, -1, -1, -1, -1 ,0};
+            int[] diameter = new int[6];            
+            int[] length = new int[6];            
+            int[] correctAnswer = new int[6];        
+            bool[] correct = new bool[6];
+            double[] result = new double[6];
+            int[] correctThings = new int[6];           
             int idWrong=0;
 
             Random r = new Random();
@@ -31,7 +27,7 @@ namespace A.I.neural.network
 
             double learningRate = 0.2;            
 
-            /*for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 5; i++)
             {
                 Console.WriteLine("Enter the diameter");
                 diameter[i] = Convert.ToInt32(Console.ReadLine());
@@ -42,6 +38,7 @@ namespace A.I.neural.network
                 if (i <= 8)
                 {
                     Console.WriteLine("{0} values were taken", i + 1);
+                    Console.WriteLine();
                 }
                 if (correctAnswer[i] == 1)
                 {
@@ -51,14 +48,14 @@ namespace A.I.neural.network
                 {
                     correctThings[i] = -1;
                 }
-            }*/
+            }
             Console.WriteLine();
             Console.WriteLine();
-            for (int j = 0; j < 9; j++)
+            for (int j = 0; j < 5; j++)
             {
                 if (result[0] == 0)
                 {
-                    for (int i = 0; i < 8; i++)
+                    for (int i = 0; i < 5; i++)
                     {
                         result[i] = ((diameter[i] * weights[0]) + (length[i] * weights[1])) + mutaion;
                         if (result[i] > 0 && correctAnswer[i] == 1)
@@ -77,9 +74,7 @@ namespace A.I.neural.network
                             Console.WriteLine(result[i] + " " + correct[i]);
                         }
                     }
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine();
+                    Console.WriteLine();                   
                 }
                 else
                 {
@@ -96,7 +91,7 @@ namespace A.I.neural.network
                     oldWeights[1] = weights[1];
                     weights[0] = WeightChange(correctThings[idWrong], diameter[idWrong], learningRate, oldWeights[0]);
                     weights[1] = WeightChange(correctThings[idWrong], length[idWrong], learningRate, oldWeights[1]);
-                    for (int i = 0; i < 8; i++)
+                    for (int i = 0; i < 5; i++)
                     {
                         result[i] = ((diameter[i] * weights[0]) + (length[i] * weights[1])) + mutaion;
                         if (result[i] > 0 && correctAnswer[i] == 1)
@@ -115,9 +110,7 @@ namespace A.I.neural.network
                             Console.WriteLine(result[i] + " " + correct[i]);
                         }
                     }
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine();
+                    Console.WriteLine();                  
                     idWrong = 0;
                     k = 0;
                 }
