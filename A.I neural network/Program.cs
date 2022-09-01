@@ -9,12 +9,15 @@ namespace A.I.neural.network
         static void Main(string[] Args)
         {
             int[] diameter = new int[6];            
-            int[] length = new int[6];            
-            int[] correctAnswer = new int[6];        
+            int[] length = new int[6];                                   
+            int[] correctAnswer = new int[6];                         
             bool[] correct = new bool[6];
             double[] result = new double[6];
             int[] correctThings = new int[6];           
             int idWrong=0;
+
+            string[] thingName = new string[6];
+            string[] computerThingName = new string[6];
 
             Random r = new Random();
             double[] weights = { -2, 0.1};
@@ -22,8 +25,8 @@ namespace A.I.neural.network
             oldWeights[0] = weights[0];
             oldWeights[1] = weights[1];
             double mutaion = 6;
-
-            int k = 0;
+            int idWrongCounter = 0;
+            int attempCounter = 2;
 
             double learningRate = 0.2;            
 
@@ -42,36 +45,56 @@ namespace A.I.neural.network
                 }
                 if (correctAnswer[i] == 1)
                 {
+                    thingName[i] = "Ring";
                     correctThings[i] = 1;
                 }
                 else if (correctAnswer[i] == 2)
                 {
+                    thingName[i] = "Pen";
                     correctThings[i] = -1;
                 }
             }
             Console.WriteLine();
             Console.WriteLine();
-            for (int j = 0; j < 5; j++)
+            for (int j = 0;; j++)
             {
                 if (result[0] == 0)
                 {
+                    Console.WriteLine("Attempt " + (j+1) + " (next attemp enter)");
                     for (int i = 0; i < 5; i++)
                     {
                         result[i] = ((diameter[i] * weights[0]) + (length[i] * weights[1])) + mutaion;
+                        if (result[i] > 0)
+                        {
+                            computerThingName[i] = "Ring";
+                        }
+                        else if (result[i] < 0)
+                        {
+                            computerThingName[i] = "Pen";
+                        }
                         if (result[i] > 0 && correctAnswer[i] == 1)
                         {
                             correct[i] = true;
-                            Console.WriteLine(result[i] + " " + correct[i]);
+                            Console.Write(result[i] + " " + "Computer {0}, we {1}", computerThingName[i], thingName[i] +" ");
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine(correct[i]);
+                            Console.ForegroundColor = ConsoleColor.White;
                         }
                         else if (result[i] < 0 && correctAnswer[i] == 2)
                         {
                             correct[i] = true;
-                            Console.WriteLine(result[i] + " " + correct[i]);
+                            Console.Write(result[i] + " " + "Computer {0}, we {1}", computerThingName[i], thingName[i] +" ");
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine(correct[i]);
+                            Console.ForegroundColor = ConsoleColor.White;
                         }
                         else
                         {
                             correct[i] = false;
-                            Console.WriteLine(result[i] + " " + correct[i]);
+                            Console.Write(result[i] + " " + "Computer {0}, we {1}", computerThingName[i], thingName[i] +" ");
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine(correct[i]);
+                            Console.ForegroundColor = ConsoleColor.White;
                         }
                     }
                     Console.WriteLine();                   
@@ -80,12 +103,12 @@ namespace A.I.neural.network
                 {
                     while (idWrong == 0)
                     {
-                        if (correct[k] == false)
+                        if (correct[idWrongCounter] == false)
                         {
-                            idWrong = k;
+                            idWrong = idWrongCounter;
                             break;
                         }
-                        k++;
+                        idWrongCounter++;
                     }
                     oldWeights[0] = weights[0];
                     oldWeights[1] = weights[1];
@@ -94,26 +117,47 @@ namespace A.I.neural.network
                     for (int i = 0; i < 5; i++)
                     {
                         result[i] = ((diameter[i] * weights[0]) + (length[i] * weights[1])) + mutaion;
+                        if (result[i] > 0)
+                        {
+                            computerThingName[i] = "Ring";
+                        }
+                        else if (result[i] < 0)
+                        {
+                            computerThingName[i] = "Pen";
+                        }
                         if (result[i] > 0 && correctAnswer[i] == 1)
                         {
                             correct[i] = true;
-                            Console.WriteLine(result[i] +" "+ correct[i]);                          
-                        }                       
+                            Console.Write(result[i] + " " + "Computer {0}, we {1}", computerThingName[i], thingName[i] +" ");
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine(correct[i]);
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
                         else if (result[i] < 0 && correctAnswer[i] == 2)
                         {
                             correct[i] = true;
-                            Console.WriteLine(result[i] +" "+ correct[i]);
-                        }    
+                            Console.Write(result[i] + " " + "Computer {0}, we {1}", computerThingName[i], thingName[i] +" ");
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine(correct[i]);
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
                         else
                         {
                             correct[i] = false;
-                            Console.WriteLine(result[i] + " " + correct[i]);
+                            Console.Write   (result[i] + " " + "Computer {0}, we {1}", computerThingName[i], thingName[i] +" ");
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine(correct[i]);
+                            Console.ForegroundColor = ConsoleColor.White;
                         }
                     }
                     Console.WriteLine();                  
                     idWrong = 0;
-                    k = 0;
+                    idWrongCounter = 0;
                 }
+                Console.WriteLine();
+                Console.Write("Attempt " + attempCounter + " (next attemp enter)");
+                Console.ReadLine();
+                attempCounter++;
             }
         }
         public static double WeightChange(int correctThing, double arm, double learningRate, double weigth)
