@@ -8,12 +8,17 @@ namespace A.I.neural.network
     {
         static void Main(string[] Args)
         {
-            int[] diameter = new int[9];
-            int[] length = new int[9];
-            int[] correctAnswer = new int[9];
+            //int[] diameter = new int[9];
+            int[] diameter = { 23,18,8,200,8,30,5,10,0};
+            //int[] length = new int[9];
+            int[] length = {4,3,2,30,150,350,100,200,0};
+            //int[] correctAnswer = new int[9];
+            int[] correctAnswer = { 1,1,1,1,2,2,2,2, 0 };
             bool[] correct = new bool[9];
             double[] result = new double[9];
-            int[] correctThings = new int[9];
+            //int[] correctThings = new int[9];
+            int[] correctThings = { 1, 1, 1, 1, -1, -1, -1, -1 ,0};
+            int idWrong=0;
 
             Random r = new Random();
             double[] weights = { -2, 0.1};
@@ -22,9 +27,11 @@ namespace A.I.neural.network
             oldWeights[1] = weights[1];
             double mutaion = 6;
 
-            double learningRate = 1;            
+            int k = 0;
 
-            for (int i = 0; i < 8; i++)
+            double learningRate = 0.2;            
+
+            /*for (int i = 0; i < 8; i++)
             {
                 Console.WriteLine("Enter the diameter");
                 diameter[i] = Convert.ToInt32(Console.ReadLine());
@@ -44,7 +51,7 @@ namespace A.I.neural.network
                 {
                     correctThings[i] = -1;
                 }
-            }
+            }*/
             Console.WriteLine();
             Console.WriteLine();
             for (int j = 0; j < 9; j++)
@@ -56,19 +63,18 @@ namespace A.I.neural.network
                         result[i] = ((diameter[i] * weights[0]) + (length[i] * weights[1])) + mutaion;
                         if (result[i] > 0 && correctAnswer[i] == 1)
                         {
-                            Console.WriteLine(result[i] + " My aswer: {0}, computer answer: Ring", correctAnswer[i]);
+                            correct[i] = true;
+                            Console.WriteLine(result[i] + " " + correct[i]);
                         }
-                        if (result[i] > 0 && correctAnswer[i] == 2)
+                        else if (result[i] < 0 && correctAnswer[i] == 2)
                         {
-                            Console.WriteLine(result[i] + " My aswer: {0}, computer answer: Ring", correctAnswer[i]);
+                            correct[i] = true;
+                            Console.WriteLine(result[i] + " " + correct[i]);
                         }
-                        if (result[i] < 0 && correctAnswer[i] == 2)
+                        else
                         {
-                            Console.WriteLine(result[i] + " My aswer: {0}, computer answer: Pen", correctAnswer[i]);
-                        }
-                        if (result[i] < 0 && correctAnswer[i] == 1)
-                        {
-                            Console.WriteLine(result[i] + " My aswer: {0}, computer answer: Pen", correctAnswer[i]);
+                            correct[i] = false;
+                            Console.WriteLine(result[i] + " " + correct[i]);
                         }
                     }
                     Console.WriteLine();
@@ -77,39 +83,49 @@ namespace A.I.neural.network
                 }
                 else
                 {
+                    while (idWrong == 0)
+                    {
+                        if (correct[k] == false)
+                        {
+                            idWrong = k;
+                            break;
+                        }
+                        k++;
+                    }
                     oldWeights[0] = weights[0];
                     oldWeights[1] = weights[1];
-                    weights[0] = WeightChange(correctThings[j], diameter[j], learningRate);
-                    weights[0] = WeightChange(correctThings[j], length[j], learningRate);
+                    weights[0] = WeightChange(correctThings[idWrong], diameter[idWrong], learningRate, oldWeights[0]);
+                    weights[1] = WeightChange(correctThings[idWrong], length[idWrong], learningRate, oldWeights[1]);
                     for (int i = 0; i < 8; i++)
                     {
                         result[i] = ((diameter[i] * weights[0]) + (length[i] * weights[1])) + mutaion;
                         if (result[i] > 0 && correctAnswer[i] == 1)
                         {
-                            Console.WriteLine(result[i] + " My aswer: {0}, computer answer: Ring", correctAnswer[i]);
-                        }
-                        if (result[i] > 0 && correctAnswer[i] == 2)
+                            correct[i] = true;
+                            Console.WriteLine(result[i] +" "+ correct[i]);                          
+                        }                       
+                        else if (result[i] < 0 && correctAnswer[i] == 2)
                         {
-                            Console.WriteLine(result[i] + " My aswer: {0}, computer answer: Ring", correctAnswer[i]);
-                        }
-                        if (result[i] < 0 && correctAnswer[i] == 2)
+                            correct[i] = true;
+                            Console.WriteLine(result[i] +" "+ correct[i]);
+                        }    
+                        else
                         {
-                            Console.WriteLine(result[i] + " My aswer: {0}, computer answer: Pen", correctAnswer[i]);
-                        }
-                        if (result[i] < 0 && correctAnswer[i] == 1)
-                        {
-                            Console.WriteLine(result[i] + " My aswer: {0}, computer answer: Pen", correctAnswer[i]);
+                            correct[i] = false;
+                            Console.WriteLine(result[i] + " " + correct[i]);
                         }
                     }
                     Console.WriteLine();
                     Console.WriteLine();
                     Console.WriteLine();
+                    idWrong = 0;
+                    k = 0;
                 }
             }
         }
-        public static double WeightChange(int correctThing, double weigth, double learningRate)
+        public static double WeightChange(int correctThing, double arm, double learningRate, double weigth)
         {
-            double result=correctThing*weigth*learningRate;            
+            double result=(correctThing*arm*learningRate) + weigth;            
             return result;
         }
     }
