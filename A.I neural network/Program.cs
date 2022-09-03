@@ -20,11 +20,11 @@ namespace A.I.neural.network
             string[] computerThingName = new string[6];
 
             Random r = new Random();
-            double[] weights = { -2, 0.1};
+            double[] weights = { r.Next(-1000,1000), r.Next(-1000, 1000) };
             double[] oldWeights = new double[2];
             oldWeights[0] = weights[0];
             oldWeights[1] = weights[1];
-            double mutaion = 6;
+            double mutaion = r.Next(-1000, 1000);
             int idWrongCounter = 0;
             int attempCounter = 2;
 
@@ -36,13 +36,19 @@ namespace A.I.neural.network
                 diameter[i] = Convert.ToInt32(Console.ReadLine());
                 Console.WriteLine("Enter the length");
                 length[i] = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine("Please enter the correct answer (1-ring, 2 - pen)");
-                correctAnswer[i] = Convert.ToInt32(Console.ReadLine());
+                if (diameter[i] > length[i])
+                {
+                    correctAnswer[i] = 1;
+                }
+                else if (diameter[i] < length[i])
+                {
+                    correctAnswer[i] = 2;
+                }
                 if (i <= 8)
                 {
                     Console.WriteLine("{0} values were taken", i + 1);
                     Console.WriteLine();
-                }
+                }                
                 if (correctAnswer[i] == 1)
                 {
                     thingName[i] = "Ring";
